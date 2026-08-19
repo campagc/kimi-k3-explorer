@@ -1,21 +1,16 @@
 # Kimi K3 — Interactive Architecture Explorer
 
-An interactive, click-to-explore walkthrough of the **Kimi K3 (2.8T)** language-model
-architecture: 93 transformer layers, hybrid **Kimi Delta Attention / Gated MLA** attention
-(3:1 ratio), **LatentMoE** feed-forwards, AttnRes depth sources, and a **1M-token context** —
-all recreated as an explorable SVG diagram in a single-page React app.
+An interactive, click-to-explore walkthrough of the **Kimi K3 (2.8T)** language-model architecture, recreated as an explorable SVG diagram in a single-page React app.
 
 ![Kimi K3 Interactive Architecture Explorer Demo](docs/kimi-k3-explorer-demo.gif)
 
 Every labelled component in the diagram is a live hotspot:
 
 - **Hover** any component for a quick summary, **click** for a deep dive
-- **Fully keyboard-navigable** — `Tab` walks the diagram, `Enter` opens the detail panel
-- **Three explanation levels** — ELI5 · Undergrad · Paper — switchable at any time
-- **Guided tour** — 23 curated stops through the whole network (`←` / `→` to navigate)
-- **Cost lens** — colour-codes every component by per-token compute/memory cost
-- Key formulas, “why not the alternative?” design rationales, and cross-links
-  between related components
+- **Fully keyboard-navigable** `Tab` walks the diagram, `Enter` opens the detail panel
+- **Three explanation levels** - ELI5 · Undergrad · Paper - switchable at any time
+- **Guided tour** 23 curated stops through the whole network (`←` / `→` to navigate)
+- **Cost lens** colour-codes every component by per-token compute/memory cost
 
 ## Credits
 
@@ -35,7 +30,7 @@ itself is developed by [Moonshot AI](https://www.moonshot.ai/).*
 **Prerequisites:** [Node.js](https://nodejs.org) ≥ 18 and npm.
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/campagc/kimi-k3-explorer.git
 cd kimi-k3-explorer
 npm install
 npm run dev
