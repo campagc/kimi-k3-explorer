@@ -4,8 +4,6 @@
 
 An interactive, click-to-explore walkthrough of the **Kimi K3 (2.8T)** language-model architecture, recreated as an explorable SVG diagram in a single-page React app.
 
-**🚀 Live demo:** [https://campagc.github.io/kimi-k3-explorer/](https://campagc.github.io/kimi-k3-explorer/)
-
 ![Kimi K3 Interactive Architecture Explorer Demo](docs/kimi-k3-explorer-demo.gif)
 
 Every labelled component in the diagram is a live hotspot:
