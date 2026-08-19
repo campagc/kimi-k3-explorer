@@ -1,6 +1,10 @@
 # Kimi K3 — Interactive Architecture Explorer
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-22c55e?style=for-the-badge&logo=github)](https://campagc.github.io/kimi-k3-explorer/)
+
 An interactive, click-to-explore walkthrough of the **Kimi K3 (2.8T)** language-model architecture, recreated as an explorable SVG diagram in a single-page React app.
+
+**🚀 Live demo:** [https://campagc.github.io/kimi-k3-explorer/](https://campagc.github.io/kimi-k3-explorer/)
 
 ![Kimi K3 Interactive Architecture Explorer Demo](docs/kimi-k3-explorer-demo.gif)
 
