@@ -94,6 +94,13 @@
 
 * { box-sizing: border-box; }
 
+/* The drawer is parked off-canvas with translateX(100%). Without this clip
+   its offscreen box widens the mobile layout viewport during the slide-in,
+   and position:fixed then binds to that wider viewport: the drawer grows
+   past the screen, never overflows, and can't scroll. clip (not hidden) so
+   no scroll container is created and the sticky toolbar keeps working. */
+html { overflow-x: clip; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -207,6 +214,12 @@ h1, h2, h3 {
   border-radius: var(--radius-full);
   background: var(--border-strong);
   margin: 0 var(--space-1);
+}
+/* Keyboard hints are wrong on touch screens; swap in tap instructions. */
+.shortcuts-touch { display: none; }
+@media (hover: none) {
+  .shortcuts-mouse { display: none; }
+  .shortcuts-touch { display: flex; }
 }
 
 /* ==========================================================================
@@ -413,12 +426,19 @@ svg text {
 .hotspot circle {
   transition: filter var(--duration) ease, stroke-width var(--duration) ease;
 }
-.hotspot:hover rect,
 .hotspot.hovered rect,
-.hotspot:hover circle,
 .hotspot.hovered circle {
   filter: brightness(1.05) drop-shadow(0 0 5px rgba(26, 127, 107, 0.55));
   stroke-width: 2.4;
+}
+/* Touch browsers keep :hover stuck on the last-tapped element, so the raw
+   :hover styles only apply where a cursor can actually hover. */
+@media (hover: hover) {
+  .hotspot:hover rect,
+  .hotspot:hover circle {
+    filter: brightness(1.05) drop-shadow(0 0 5px rgba(26, 127, 107, 0.55));
+    stroke-width: 2.4;
+  }
 }
 .hotspot.selected rect,
 .hotspot.selected circle {
@@ -792,6 +812,21 @@ svg text {
 }
 
 /* ==========================================================================
+   Touch — 38px controls and 28px icon buttons are under the 44px finger
+   target both platforms recommend, so coarse pointers get a taller scale.
+   ========================================================================== */
+
+@media (pointer: coarse) {
+  :root { --control-h: 44px; }
+
+  /* 44px control − 4px padding − 1px border, top and bottom. */
+  .segment span { height: 34px; }
+  .close-btn { width: 40px; height: 40px; }
+  .btn-sm { height: 36px; padding: 0 var(--space-4); }
+  .related-link { padding: var(--space-2) var(--space-3); }
+}
+
+/* ==========================================================================
    Responsive — below the 3-column breakpoint the panel becomes a drawer.
    ========================================================================== */
 
@@ -803,6 +838,11 @@ svg text {
     top: 0;
     right: 0;
     bottom: 0;
+    /* The panel is a grid item of .layout, so its containing block is the
+       content-sized grid row, not the viewport: top:0/bottom:0 alone leave it
+       as tall as its content and it can never scroll. Force viewport height. */
+    height: 100vh;
+    height: 100dvh;
     width: min(420px, 92vw);
     max-height: none;
     z-index: 60;
@@ -810,6 +850,8 @@ svg text {
     border-radius: 0;
     box-shadow: var(--shadow-xl);
     padding-top: max(var(--space-6), env(safe-area-inset-top));
+    padding-right: max(var(--space-6), env(safe-area-inset-right));
+    padding-bottom: max(var(--space-6), env(safe-area-inset-bottom));
     transform: translateX(100%);
     visibility: hidden;
     transition:
@@ -831,11 +873,20 @@ svg text {
 }
 
 @media (max-width: 899px) {
-  .app { padding-bottom: var(--space-8); }
+  /* 32px side padding wastes a tenth of a phone screen. */
+  .app {
+    padding:
+      var(--space-4)
+      max(var(--space-4), env(safe-area-inset-right))
+      var(--space-8)
+      max(var(--space-4), env(safe-area-inset-left));
+  }
   .layout {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6);
   }
+  /* A vertical bar makes no sense once the toolbar wraps onto two lines. */
+  .toolbar-divider { display: none; }
   .app-header h1 { font-size: var(--text-2xl); }
   .tagline { font-size: var(--text-base); }
   .column-main { max-width: 560px; }

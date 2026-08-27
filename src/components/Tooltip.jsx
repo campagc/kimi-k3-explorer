@@ -3,6 +3,11 @@ import { getComponent } from '../data/registry';
 
 const GAP = 14;
 
+// On touch devices a tap fires mouseenter and nothing ever moves the cursor,
+// so the tooltip would pin itself to a stale position and float above the
+// detail drawer. No hover capability, no tooltip — the tap opens the drawer.
+const CAN_HOVER = window.matchMedia('(hover: hover)').matches;
+
 // The tooltip owns cursor geometry: position is tracked here and applied to the
 // DOM node directly, so mouse movement never re-renders the app.
 //
@@ -59,7 +64,7 @@ export default function Tooltip({ hoveredId }) {
 
   useLayoutEffect(place, [hoveredId, place]);
 
-  if (!info) return null;
+  if (!info || !CAN_HOVER) return null;
   return (
     <div className="tooltip" role="tooltip" ref={ref}>
       <p className="tooltip-name">{info.name}</p>

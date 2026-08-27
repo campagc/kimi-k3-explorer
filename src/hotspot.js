@@ -16,6 +16,11 @@ export function hotspotClass(id, io) {
   return c;
 }
 
+// A tap on a touch screen fires mouseenter but no reliable mouseleave, which
+// would leave the .hovered highlight stuck on the last-tapped hotspot. Only
+// real cursors drive hover; focus/blur still cover keyboard users.
+const CAN_HOVER = window.matchMedia('(hover: hover)').matches;
+
 // Hotspots are keyboard-reachable: role + tabIndex + Enter/Space, and an
 // aria-label carrying the component name and its one-line summary.
 export function hotspotProps(id, io) {
@@ -27,8 +32,8 @@ export function hotspotProps(id, io) {
     tabIndex: 0,
     'aria-label': info ? `${info.name} — ${info.short}` : id,
     'aria-pressed': io.selectedId === id,
-    onMouseEnter: () => io.onHover(id),
-    onMouseLeave: () => io.onHover(null),
+    onMouseEnter: CAN_HOVER ? () => io.onHover(id) : undefined,
+    onMouseLeave: CAN_HOVER ? () => io.onHover(null) : undefined,
     onFocus: () => io.onHover(id),
     onBlur: () => io.onHover(null),
     onClick: (e) => {

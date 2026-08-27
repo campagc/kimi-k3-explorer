@@ -57,6 +57,19 @@ export default function App() {
     if (current) setSelectedId(current);
   }, [current]);
 
+  // The drawer is modal below the 3-column breakpoint: freeze the page behind
+  // it so a scroll gesture can't wander the diagrams while reading details.
+  // Locks <html>, not <body>: with overflow-x: clip on the root, body's
+  // overflow no longer propagates to the viewport, so locking body alone
+  // would leave the page scrollable.
+  useEffect(() => {
+    if (!selectedId || !window.matchMedia('(max-width: 1279px)').matches) return;
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = 'hidden';
+    return () => { root.style.overflow = prevOverflow; };
+  }, [selectedId]);
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') {
@@ -89,7 +102,7 @@ export default function App() {
           Kimi&nbsp;K3 <span className="param-count" translate="no">2.8T</span>
         </h1>
         <p className="tagline">Interactive Architecture Explorer</p>
-        <p className="shortcuts">
+        <p className="shortcuts shortcuts-mouse">
           <kbd>Hover</kbd> a component for a summary
           <span className="dot" aria-hidden="true" />
           <kbd>Click</kbd> or <kbd>Enter</kbd> for the deep dive
@@ -97,6 +110,11 @@ export default function App() {
           <kbd>Tab</kbd> to walk the diagram
           <span className="dot" aria-hidden="true" />
           <kbd>Esc</kbd> to close
+        </p>
+        <p className="shortcuts shortcuts-touch">
+          <kbd>Tap</kbd> a component for the deep dive
+          <span className="dot" aria-hidden="true" />
+          <kbd>Tap</kbd> the backdrop to close
         </p>
       </header>
 
